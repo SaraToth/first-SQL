@@ -1,10 +1,10 @@
 const getIndex = (req, res) => {
     console.log("usernames will be logged here - wip")
-    res.send("Index page");
+    res.render("index");
 };
 
 const getNew = (req, res) => {
-    res.send("New page");
+    res.render("newUser");
 };
 
 const postNew = (req, res) => {
