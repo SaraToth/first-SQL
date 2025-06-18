@@ -1,4 +1,5 @@
 const getIndex = (req, res) => {
+    console.log("usernames will be logged here - wip")
     res.send("Index page");
 };
 
@@ -7,7 +8,7 @@ const getNew = (req, res) => {
 };
 
 const postNew = (req, res) => {
-    res.send("post submited");
+    console.log("username to be saved: ", req.body.username)
 };
 
 module.exports = { getIndex, getNew, postNew };
