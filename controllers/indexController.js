@@ -8,24 +8,21 @@ const getIndex = asyncHandler(async (req, res) => {
     if (searchQuery) {
         const searchResults = await db.searchUsernames(searchQuery);
         if (searchResults.length > 0) {
-            res.render("index", 
+            return res.render("index", 
                 { 
                     usernames: usernames, 
                     searchResults: searchResults, 
                     noMatches: false,
                     searchQuery: searchQuery || "",
                 });
-            return;
-        } else {
-            res.render("index", 
-                { 
-                    usernames: usernames, 
-                    searchResults: [], 
-                    noMatches: true,
-                    searchQuery: searchQuery || "",
-                });
-            return;
         }
+       return res.render("index", 
+            { 
+                usernames: usernames, 
+                searchResults: [], 
+                noMatches: true,
+                searchQuery: searchQuery || "",
+            });
     }
 
     res.render("index", 
