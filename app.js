@@ -3,6 +3,7 @@ const app = express();
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
 const CustomNotFoundError = require("./errors/customNotFoundError");
+require("dotenv").config();
 
 app.use(express.urlencoded({ extended:true }));
 
@@ -20,7 +21,6 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).send(err.message);
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log("App is running");
 });

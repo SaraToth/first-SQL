@@ -10,6 +10,10 @@
     <% if (usernames.length === 0) {%>
         <p>There are no users. Be the first to add one</p>
     <%} else {%>
+        <form action="/" method="GET">
+            <input type="text" name="search" id="search" placeholder="Search Username">
+            <button type="submit">Search</button>
+        </form>
         <ul>
             <% usernames.forEach(user => {%>
                 <li><%= user.username %></li>
