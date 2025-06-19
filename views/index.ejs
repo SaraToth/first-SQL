@@ -6,7 +6,7 @@
     <title>Users</title>
 </head>
 <body>
-    <h1>Usernames</h1>
+    <h1>Username Database</h1>
     <% if (usernames.length === 0) {%>
         <p>There are no users. Be the first to add one</p>
     <%} else {%>
@@ -14,6 +14,20 @@
             <input type="text" name="search" id="search" placeholder="Search Username">
             <button type="submit">Search</button>
         </form>
+            <% if (searchQuery && noMatches) {%>
+                <h2>Showing Search Results for "<%=searchQuery%>"</h2>
+                <p>No users matched your search</p>
+            <%}%>
+        <% if (searchResults && searchResults.length > 0) {%>
+            <h2>Showing Search Results for "<%=searchQuery%>":</h2>
+            <ul>
+                <% searchResults.forEach(result => {%>
+                    <li><%= result.username%></li>
+                <%})%>
+            </ul>
+        <%}%>
+        
+        <h2>All Users:</h2>
         <ul>
             <% usernames.forEach(user => {%>
                 <li><%= user.username %></li>
