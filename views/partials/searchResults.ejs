@@ -1,0 +1,12 @@
+<% if (searchQuery) {%>
+    <h2>Showing Search Results for "<%=searchQuery%>"</h2>
+    <% if (noMatches) {%>
+    <p>No users matched your search</p>
+    <%} else {%>
+        <ul>
+            <% searchResults.forEach(result => {%>
+                <li><%= result.username%></li>
+            <%})%>
+        </ul>
+    <%}%>
+<%}%>
