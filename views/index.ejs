@@ -10,7 +10,7 @@
     <% if (usernames.length === 0) {%>
         <p>There are no users. Be the first to add one</p>
     <%} else {%>
-        <!-- Search is only available when there are users -->
+        <!-- Search existing users -->
         <%- include("partials/searchBar") %>
 
         <!-- Renders when a search has been run -->
@@ -19,12 +19,7 @@
         <%}%>
         
         <!-- Displays all existing users -->
-        <h2>All Users:</h2>
-        <ul>
-            <% usernames.forEach(user => {%>
-                <li><%= user.username %></li>
-            <%})%>
-        </ul>
+        <%- include("partials/allUsers") %>
     <%}%>
     <br>
     <a href="/new">Add username</a>
