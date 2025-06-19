@@ -44,8 +44,9 @@ const postNew = asyncHandler(async (req, res) => {
     res.redirect("/");
 });
 
-const getDelete = (req, res) => {
-    res.send("delete all users");
-}
+const getDelete = asyncHandler(async (req, res) => {
+    await db.deleteAllUsernames();
+    res.redirect("/");
+});
 
 module.exports = { getIndex, getNew, postNew, getDelete };
