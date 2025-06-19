@@ -20,11 +20,15 @@ const getNew = (req, res) => {
     res.render("newUser");
 };
 
-const postNew = (req, res) => {
-    const { username } = req.body;
-    db.insertUsername(username);
-    res.redirect("/");
-    console.log("username to be saved: ", req.body.username)
+const postNew = async (req, res) => {
+    try {
+        const { username } = req.body;
+        await db.insertUsername(username);
+        res.redirect("/");
+    } catch (error) {
+        console.error("Error posting new username:", error);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
 module.exports = { getIndex, getNew, postNew };
