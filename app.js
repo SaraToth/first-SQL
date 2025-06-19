@@ -10,6 +10,11 @@ app.set("view engine", "ejs");
 
 app.use("/", indexRouter);
 
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send(err);
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log("App is running");
