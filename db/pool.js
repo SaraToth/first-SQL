@@ -1,10 +1,9 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
+const localDatabaseURL = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+
+//DATABASE_URL is provided by production database
 module.exports = new Pool({
-    host: "localhost",
-    user: process.env.DB_USER,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: 5432
-});
+    connectionString: process.env.DATABASE_URL || localDatabaseURL
+})
