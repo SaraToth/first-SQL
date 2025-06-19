@@ -6,6 +6,7 @@
     "express-async-handler": "^1.2.0",
     "pg": "^8.16.1"
   },
+
   "scripts": {
     "build": "echo 'No build needed'",
     "start": "node app.js"
