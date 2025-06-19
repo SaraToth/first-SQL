@@ -44,4 +44,8 @@ const postNew = asyncHandler(async (req, res) => {
     res.redirect("/");
 });
 
-module.exports = { getIndex, getNew, postNew };
+const getDelete = (req, res) => {
+    res.send("delete all users");
+}
+
+module.exports = { getIndex, getNew, postNew, getDelete };
