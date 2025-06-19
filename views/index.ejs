@@ -10,23 +10,27 @@
     <% if (usernames.length === 0) {%>
         <p>There are no users. Be the first to add one</p>
     <%} else {%>
+        <!-- Search is only available when there are users -->
         <form action="/" method="GET">
             <input type="text" name="search" id="search" placeholder="Search Username">
             <button type="submit">Search</button>
         </form>
-            <% if (searchQuery && noMatches) {%>
-                <h2>Showing Search Results for "<%=searchQuery%>"</h2>
-                <p>No users matched your search</p>
-            <%}%>
-        <% if (searchResults && searchResults.length > 0) {%>
-            <h2>Showing Search Results for "<%=searchQuery%>":</h2>
-            <ul>
-                <% searchResults.forEach(result => {%>
-                    <li><%= result.username%></li>
-                <%})%>
-            </ul>
+
+        <!-- Renders when a search has been run -->
+        <% if (searchQuery) {%>
+           <h2>Showing Search Results for "<%=searchQuery%>"</h2>
+           <% if (noMatches) {%>
+            <p>No users matched your search</p>
+           <%} else {%>
+                <ul>
+                    <% searchResults.forEach(result => {%>
+                        <li><%= result.username%></li>
+                    <%})%>
+                </ul>
+           <%}%>
         <%}%>
         
+        <!-- Displays all existing users -->
         <h2>All Users:</h2>
         <ul>
             <% usernames.forEach(user => {%>
