@@ -7,9 +7,16 @@
 </head>
 <body>
     <h1>Usernames</h1>
-    <%= users %><br>
+    <% if (usernames.length === 0) {%>
+        <p>There are no users. Be the first to add one</p>
+    <%} else {%>
+        <ul>
+            <% usernames.forEach(user => {%>
+                <li><%= user.username %></li>
+            <%})%>
+        </ul>
+    <%}%>
+    <br>
     <a href="/new">Add username</a>
 </body>
 </html>
-
-<!-- "Usernames: " + usernames.map(user => user.username).join(", ")); -->
