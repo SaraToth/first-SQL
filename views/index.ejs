@@ -11,10 +11,7 @@
         <p>There are no users. Be the first to add one</p>
     <%} else {%>
         <!-- Search is only available when there are users -->
-        <form action="/" method="GET">
-            <input type="text" name="search" id="search" placeholder="Search Username">
-            <button type="submit">Search</button>
-        </form>
+        <%- include("partials/searchBar") %>
 
         <!-- Renders when a search has been run -->
         <% if (searchQuery) {%>
