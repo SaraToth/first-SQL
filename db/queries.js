@@ -10,4 +10,10 @@ async function insertUsername(username) {
 
 };
 
-module.exports = { getAllUsernames, insertUsername };
+async function searchUsernames(searchQuery) {
+    const searchTerm = `%${searchQuery}%`;
+    const { rows } = await pool.query("SELECT * FROM usernames WHERE username ILIKE $1", [searchTerm]);
+    return rows;
+}
+
+module.exports = { getAllUsernames, insertUsername, searchUsernames };
