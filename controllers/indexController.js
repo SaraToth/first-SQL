@@ -4,11 +4,11 @@ const getIndex = async (req, res) => {
     try{
         const usernames = await db.getAllUsernames();
         if (!usernames) {
-            res.status(404).send("No usernames can be found");
+            res.status(404).send("No usernames can be found"); // switch to custom 404
             return;
         }
-
-        res.send("Usernames: " + usernames.map(user => user.username).join(", "));
+        const usernameList = usernames.map(user => user.username).join(", ");
+        res.render("index", { users: usernameList });
     } catch (error) {
         console.error("Error retrieving usernames:", error);
         res.status(500).send("Internal Server Error");
