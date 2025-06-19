@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
+const CustomNotFoundError = require("./errors/customNotFoundError");
 
 app.use(express.urlencoded({ extended:true }));
 
@@ -11,12 +12,12 @@ app.set("view engine", "ejs");
 app.use("/", indexRouter);
 
 app.use((req, res, next) => {
-    res.status(404).send("404: Page does not exist");
+    throw new CustomNotFoundError("Page not found");
 });
 
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500).send(err);
+    res.status(err.statusCode || 500).send(err.message);
 });
 
 const PORT = 3000;
