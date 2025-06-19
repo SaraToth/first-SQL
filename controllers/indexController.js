@@ -1,6 +1,23 @@
 const db = require("../db/queries");
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
+const alphaErr = "must only contain letters.";
+const lengthErr = "must be between 1 and 10 characters.";
+
+const validateUsername = [
+    body("username").trim()
+        .isAlpha().withMessage(`Username ${alphaErr}`)
+        .isLength({ min: 1, max: 10 }).withMessage(`Username ${lengthErr}`),
+];
+
+const validateSearchTerm = [
+    body("search").trim()
+    .isAlpha().withMessage(`Search term ${alphaErr}`)
+    .isLength({ min: 1, max: 10 }).withMessage(`Search term ${lengthErr}`), 
+];
+
+// search term
 const getIndex = asyncHandler(async (req, res) => {
     const searchQuery = req.query.search;
     const usernames = await db.getAllUsernames();
@@ -38,11 +55,21 @@ const getNew = (req, res) => {
     res.render("newUser");
 };
 
-const postNew = asyncHandler(async (req, res) => {
-    const { username } = req.body;
-    await db.insertUsername(username);
-    res.redirect("/");
-});
+// username form
+const postNew = [
+    validateUsername,
+
+    asyncHandler(async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("newUser", { errors: errors.array()});
+        }
+
+        const { username } = req.body;
+        await db.insertUsername(username);
+        res.redirect("/");
+    })
+];
 
 const getDelete = asyncHandler(async (req, res) => {
     await db.deleteAllUsernames();

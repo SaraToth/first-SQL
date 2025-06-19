@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Add a New User</h1>
+    <%- include("partials/errors.ejs") %>
     <form action="/new" method="POST">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
