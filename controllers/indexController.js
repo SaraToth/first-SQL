@@ -17,56 +17,49 @@ const validateSearchTerm = [
     .isLength({ min: 1, max: 10 }).withMessage(`Search term ${lengthErr}`), 
 ];
 
-// search term
-const getIndex = [
+const getSearchIndex = [
     validateSearchTerm,
 
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req, res, next) => {
         const searchQuery = req.query.search;
+
+        if (!searchQuery) return next();
+
         const usernames = await db.getAllUsernames();
+        const errors = validationResult(req);
 
-        if (searchQuery) {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).render("index", {
-                    usernames: usernames,
-                    searchResults: [],
-                    noMatches: true,
-                    searchQuery: searchQuery,
-                    errors: errors.array(),
-                });
-            }
-
-            const searchResults = await db.searchUsernames(searchQuery);
-            if (searchResults.length > 0) {
-                return res.render("index", 
-                    { 
-                        usernames: usernames, 
-                        searchResults: searchResults, 
-                        noMatches: false,
-                        searchQuery: searchQuery || "",
-                    });
-            }
-        return res.render("index", 
-                { 
-                    usernames: usernames, 
-                    searchResults: [], 
-                    noMatches: true,
-                    searchQuery: searchQuery || "",
-                });
+        if(!errors.isEmpty()) {
+            return res.status(400).render("index", {
+                usernames: usernames,
+                searchResults: [],
+                noMatches: true,
+                searchQuery: searchQuery,
+                errors: errors.array(),
+            });
         }
 
-        res.render("index", 
-            { 
-                usernames: usernames, 
-                searchResults: [], 
-                noMatches: true,
-                searchQuery: searchQuery || "", 
-            });
-    }),
-
-
+        const searchResults = await db.searchUsernames(searchQuery);
+            return res.render("index", 
+                { 
+                    usernames: usernames, 
+                    searchResults: searchResults, 
+                    noMatches: false,
+                    searchQuery: searchQuery || "",
+                });
+    })
 ];
+
+const getIndex = asyncHandler(async (req, res) => {
+    const usernames = await db.getAllUsernames();
+    res.render("index", 
+        { 
+            usernames: usernames, 
+            searchResults: [], 
+            noMatches: true,
+            searchQuery: "", 
+        });
+});
+
 
 const getNew = (req, res) => {
     res.render("newUser");
@@ -93,4 +86,4 @@ const getDelete = asyncHandler(async (req, res) => {
     res.redirect("/");
 });
 
-module.exports = { getIndex, getNew, postNew, getDelete };
+module.exports = { getIndex, getNew, postNew, getDelete, getSearchIndex };
