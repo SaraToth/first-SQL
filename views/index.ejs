@@ -15,6 +15,7 @@
 
         <!-- Renders when a search has been run -->
         <% if (searchQuery) {%>
+            <%- include("partials/errors") %>
             <%- include("partials/searchResults", {searchQuery, noMatches, searchResults}) %>
         <%}%>
         

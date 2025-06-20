@@ -1,6 +1,6 @@
 const db = require("../db/queries");
 const asyncHandler = require("express-async-handler");
-const { body, validationResult } = require("express-validator");
+const { body, query, validationResult } = require("express-validator");
 
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
@@ -12,44 +12,61 @@ const validateUsername = [
 ];
 
 const validateSearchTerm = [
-    body("search").trim()
+    query("search").exists().notEmpty().trim()
     .isAlpha().withMessage(`Search term ${alphaErr}`)
     .isLength({ min: 1, max: 10 }).withMessage(`Search term ${lengthErr}`), 
 ];
 
 // search term
-const getIndex = asyncHandler(async (req, res) => {
-    const searchQuery = req.query.search;
-    const usernames = await db.getAllUsernames();
+const getIndex = [
+    validateSearchTerm,
 
-    if (searchQuery) {
-        const searchResults = await db.searchUsernames(searchQuery);
-        if (searchResults.length > 0) {
-            return res.render("index", 
+    asyncHandler(async (req, res) => {
+        const searchQuery = req.query.search;
+        const usernames = await db.getAllUsernames();
+
+        if (searchQuery) {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).render("index", {
+                    usernames: usernames,
+                    searchResults: [],
+                    noMatches: true,
+                    searchQuery: searchQuery,
+                    errors: errors.array(),
+                });
+            }
+
+            const searchResults = await db.searchUsernames(searchQuery);
+            if (searchResults.length > 0) {
+                return res.render("index", 
+                    { 
+                        usernames: usernames, 
+                        searchResults: searchResults, 
+                        noMatches: false,
+                        searchQuery: searchQuery || "",
+                    });
+            }
+        return res.render("index", 
                 { 
                     usernames: usernames, 
-                    searchResults: searchResults, 
-                    noMatches: false,
+                    searchResults: [], 
+                    noMatches: true,
                     searchQuery: searchQuery || "",
                 });
         }
-       return res.render("index", 
+
+        res.render("index", 
             { 
                 usernames: usernames, 
                 searchResults: [], 
                 noMatches: true,
-                searchQuery: searchQuery || "",
+                searchQuery: searchQuery || "", 
             });
-    }
+    }),
 
-    res.render("index", 
-        { 
-            usernames: usernames, 
-            searchResults: [], 
-            noMatches: true,
-            searchQuery: searchQuery || "", 
-        });
-});
+
+];
 
 const getNew = (req, res) => {
     res.render("newUser");
